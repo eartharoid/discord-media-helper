@@ -1,0 +1,5 @@
+*.exe
+.env
+node_modules/
+logs/
+tmp/

@@ -15,6 +15,8 @@ module.exports = (message, data) => {
 		resolve(client.config.files),
 		'-o',
 		`${data.groups.id}.${data.groups.site}.%(ext)s`,
+		'-S',
+		'codec:h264',
 	];
 
 	const child = spawn(client.config.ytdl.bin, args);

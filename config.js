@@ -8,6 +8,10 @@ module.exports = {
 			handler: ytdl,
 			regex: /http(s)?:\/\/(www\.)?(?<site>instagram).com\/(p|reel)\/(?<id>[a-z0-9]+)/gmi,
 		},
+		'twitter': {
+			handler: ytdl,
+			regex: /http(s)?:\/\/(www\.)?(?<site>twitter).com\/[a-z0-9_-]+\/status\/(?<id>[a-z0-9]+)/gmi,
+		},
 		'tiktok': {
 			handler: ytdl,
 			regex: /http(s)?:\/\/(www\.)?(?<site>tiktok).com\/((@[a-z0-9_-]+\/video\/)|t\/)(?<id>[a-z0-9]+)/gmi,

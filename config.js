@@ -4,9 +4,21 @@ module.exports = {
 	files: 'tmp', // absolute or relative path (eg. /var/www/html/videos)
 	host: 'https://example.com/videos/', // IMPORTANT: MUST end with a trailing slash
 	sites: {
+		'facebook': {
+			handler: ytdl,
+			regex: /http(s)?:\/\/(www\.)?(?<site>facebook).com\/[a-z0-9._-]+\/videos\/(?<id>[a-z0-9_-]+)/gmi,
+		},
+		'fb-watch': {
+			handler: ytdl,
+			regex: /http(s)?:\/\/(?<site>fb)\.watch\/(?<id>[a-z0-9_-]+)/gmi,
+		},
 		'instagram': {
 			handler: ytdl,
 			regex: /http(s)?:\/\/(www\.)?(?<site>instagram).com\/(p|reel)\/(?<id>[a-z0-9_-]+)/gmi,
+		},
+		'reddit': {
+			handler: ytdl,
+			regex: /http(s)?:\/\/(www\.)?(?<site>reddit).com\/r\/[a-z0-9._-]+\/comments\/(?<id>[a-z0-9]+)/gmi,
 		},
 		'tiktok': {
 			handler: ytdl,

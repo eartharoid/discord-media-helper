@@ -15,6 +15,7 @@ This bot watches chat for video links and replies to messages containing support
 **Requires message content privileged intent to be enabled** 
 
 1. Create a `.env` file and paste `DISCORD_TOKEN=` followed by the token
-2. edit `config.js`
-3. `npm i`
-4. `node .`
+2. Download [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+3. edit `config.js` (directory, host, and executable)
+4. `npm i`
+5. `node .` (daemonize it if you're smart)

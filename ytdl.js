@@ -24,7 +24,7 @@ module.exports = (message, data) => {
 	child.stdout.on('data', line => {
 		const str = line.toString().replace(/\n$/, '');
 		client.log.info.ytdl(str);
-		const regex = new RegExp(`${data.groups.id}\\.${data.groups.site}\\.[a-z0-9]+`);
+		const regex = new RegExp(`${data.groups.id}\\.${data.groups.site}\\.[a-z0-9]+(\\s|$)`);
 		const match = str.match(regex);
 		if (match) file = match[0];
 	});

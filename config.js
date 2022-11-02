@@ -6,31 +6,31 @@ module.exports = {
 	sites: {
 		'facebook': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(www\.)?(?<site>facebook).com\/[a-z0-9._-]+\/videos\/(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>facebook).com\/[a-z0-9._-]+\/videos\/(?<id>[a-z0-9_-]+)/gmi,
 		},
 		'fb-watch': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(?<site>fb)\.watch\/(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(?<site>fb)\.watch\/(?<id>[a-z0-9_-]+)/gmi,
 		},
 		'instagram': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(www\.)?(?<site>instagram).com\/(p|reel)\/(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>instagram).com\/(p|reel)\/(?<id>[a-z0-9_-]+)/gmi,
 		},
 		'reddit': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(www\.)?(?<site>reddit).com\/r\/[a-z0-9._-]+\/comments\/(?<id>[a-z0-9]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>reddit).com\/r\/[a-z0-9._-]+\/comments\/(?<id>[a-z0-9]+)/gmi,
 		},
 		'tiktok': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(www\.)?(?<site>tiktok).com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>tiktok).com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/gmi,
 		},
 		'tiktok-vm': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/vm\.(?<site>tiktok).com\/(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/vm\.(?<site>tiktok).com\/(?<id>[a-z0-9_-]+)/gmi,
 		},
 		'twitter': {
 			handler: ytdl,
-			regex: /http(s)?:\/\/(www\.)?(?<site>twitter).com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/gmi,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>twitter).com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/gmi,
 		},
 	},
 	ytdl: { bin: 'yt-dlp.exe' }, // absolute or relative path to binary/executable

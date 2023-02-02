@@ -4,6 +4,8 @@ const config = require('./config');
 const Logger = require('leekslazylogger');
 const log = new Logger({ namespaces: ['ytdl'] });
 
+const Proxies = require('./proxies');
+
 process.on('unhandledRejection', error => {
 	if (error instanceof Error) log.warn(`Uncaught ${error.name}`);
 	log.error(error);
@@ -23,6 +25,7 @@ const client = new Client({
 });
 client.config = config;
 client.log = log;
+client.proxies = new Proxies(log);
 
 function setPresence() {
 	client.user.setActivity({
@@ -53,4 +56,5 @@ client.on('messageCreate', message => {
 	}
 });
 
+log.info('Connecting to Discord...');
 client.login();

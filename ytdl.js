@@ -5,9 +5,10 @@ const { resolve } = require('path');
  * @param {import("discord.js").Message} message
  * @param {RegExpExecArray } data
  */
-module.exports = (message, data) => {
+function ytdl(message, data, attempt = 0)  {
 	const { client } = message;
-
+	const proxy = client.proxies.getProxy();
+	if (!proxy) return client.log.error('No proxies available');
 	let file;
 	const args = [
 		data[0],
@@ -17,6 +18,8 @@ module.exports = (message, data) => {
 		`${data.groups.id}.${data.groups.site}.%(ext)s`,
 		'-S',
 		'codec:h264',
+		'--proxy',
+		proxy,
 	];
 
 	const child = spawn(client.config.ytdl.bin, args);
@@ -37,6 +40,18 @@ module.exports = (message, data) => {
 			str = str.substring(9);
 		}
 		client.log[level].ytdl(str);
+
+		// getaddrinfo failed, timed out connection closed without response, etc
+		if (str.includes('urlopen error')) {
+			client.proxies.reportProxy(proxy);
+			if (attempt === 5) {
+				client.log.warn(`Failed to download ${data.groups.id}.${data.groups.site} after 5 attempts, giving up`);
+			} else {
+				client.log.info(`Retrying download for ${data.groups.id}.${data.groups.site}`);
+				ytdl(message, data, attempt + 1);
+			}
+
+		}
 	});
 
 	child.on('close', async code => {
@@ -53,4 +68,6 @@ module.exports = (message, data) => {
 			return client.log.warn('File is missing');
 		}
 	});
-};
+}
+
+module.exports = ytdl;

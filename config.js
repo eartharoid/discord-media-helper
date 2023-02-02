@@ -12,6 +12,10 @@ module.exports = {
 			handler: ytdl,
 			regex: /(?<!!)http(s)?:\/\/(?<site>fb)\.watch\/(?<id>[a-z0-9_-]+)/gmi,
 		},
+		'ifunny': {
+			handler: ytdl,
+			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>ifunny).co\/video\/(?<id>[a-z0-9_-]+)/gmi,
+		},
 		'instagram': {
 			handler: ytdl,
 			regex: /(?<!!)http(s)?:\/\/(www\.)?(?<site>instagram).com\/(p|reel)\/(?<id>[a-z0-9_-]+)/gmi,

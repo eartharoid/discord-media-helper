@@ -41,9 +41,12 @@ function ytdl(message, data, attempt = 0)  {
 		}
 		client.log[level].ytdl(str);
 
-		// getaddrinfo failed, timed out connection closed without response, etc
-		if (str.includes('urlopen error')) {
-			client.proxies.reportProxy(proxy);
+		// getaddrinfo failed, timed out connection closed without response etc, or rate limit
+		if (str.includes('urlopen error') || str.includes('rate-limit')) {
+			if (str.includes('urlopen error')) { // don't report proxy for rate limit
+				client.proxies.reportProxy(proxy);
+			}
+
 			if (attempt === 5) {
 				client.log.warn(`Failed to download ${data.groups.id}.${data.groups.site} after 5 attempts, giving up`);
 			} else {

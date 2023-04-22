@@ -161,7 +161,7 @@
 		"object-curly-newline": [
 			"error",
 			{
-				"minProperties": 2,
+				"minProperties": 3,
 				"multiline": true
 			}
 		],

@@ -1,5 +1,9 @@
-*.exe
-.env
+.env*
+.netrc
+cookies.txt
+proxies.txt
+config/
+bin/
 node_modules/
 logs/
 tmp/

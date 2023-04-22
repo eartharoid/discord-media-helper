@@ -1,6 +1,10 @@
 {
-  "name": "ryan-embed-bot",
-  "main": "index.js",
+  "name": "discord-media-helper",
+  "main": "src/",
+  "scripts": {
+    "dev": ".\\bin\\caddy.exe file-server --browse --root tmp",
+    "dev-cloudflared": ".\\bin\\cloudflared.exe tunnel run dmh"
+  },
   "devDependencies": {
     "eslint": "^8.24.0"
   },

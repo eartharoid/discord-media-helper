@@ -97,4 +97,4 @@ Refer to the [yt-dlp documentation](https://github.com/yt-dlp/yt-dlp#authenticat
 3. Go to *Application* > *Cookies* and select the domain
 4. Select and copy the data in the table
 5. Paste it into a temporary file, e.g. `in.txt`
-6. Run [`node scripts/cookies in.txt >> cookies.txt`](https://github.com/dandv/convert-chrome-cookies-to-netscape-format) to correctly format the cookies
+6. Run [`node scripts/cookies in.txt >> config/cookies.txt`](https://github.com/dandv/convert-chrome-cookies-to-netscape-format) to correctly format the cookies

@@ -42,9 +42,9 @@ function ytdl(data, attempt = 0) {
 		child.stdout.on('data', line => {
 			const str = line.toString().replace(/\n$/, '');
 			log.info.ytdl(str);
-			const regex = new RegExp(`${data.groups.id}\\.${data.groups.site}\\.[a-z0-9]+("|\\s|$)`);
+			const regex = new RegExp(`(${data.groups.id}\\.${data.groups.site}\\.[a-z0-9]+)("|\\s|$)`);
 			const match = str.match(regex);
-			if (match) file = match[0];
+			if (match) file = match[1];
 		});
 
 		child.stderr.on('data', line => {

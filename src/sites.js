@@ -64,4 +64,7 @@ function getFirstSite(content) {
 	return null;
 }
 
-module.exports = getFirstSite;
+module.exports = {
+	getFirstSite,
+	rewrite,
+};

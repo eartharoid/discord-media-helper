@@ -56,6 +56,8 @@ function ytdl(data, attempt = 0) {
 			}
 			log[level].ytdl(str);
 
+			if (str.includes('Unsupported URL')) return reject(data);
+
 			// getaddrinfo failed, timed out connection closed without response etc, or rate limit
 			if (str.includes('urlopen error') || str.includes('rate-limit')) {
 				if (str.includes('urlopen error')) { // don't report proxy for rate limit

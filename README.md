@@ -35,6 +35,7 @@ git clone https://github.com/eartharoid/discord-mediahelper.git bot && cd bot
 
 Then create a `.env` file with the following contents:
 ```
+DISCORD_CLIENT_ID=
 DISCORD_TOKEN=
 DOWNLOAD_DIR=
 HOST=
@@ -43,13 +44,14 @@ MAX_FILE_SIZE=50M
 
 > e.g.
 > ```bash
-> echo "DISCORD_TOKEN=\nDOWNLOAD_DIR=\nHOST=\nMAX_FILE_SIZE=50M" > .env
+> echo "DISCORD_CLIENT_ID=\nDISCORD_TOKEN=\nDOWNLOAD_DIR=\nHOST=\nMAX_FILE_SIZE=50M" > .env
 > ```
 
 Create a Discord application and bot **with the message content privileged intent enabled** and paste the token into the `.env` file.
 
 Also, set the other environment variables:
 
+- `DISCORD_CLIENT_ID`: the client ID of the Discord application
 - `DOWNLOAD_DIR`: the directory which is served by a web server (e.g. `/var/www/html/videos`) where videos will be downloaded to
 - `HOST`: the web server URL, which must end with a `/` (e.g. `https://example.com/videos/`)
 
@@ -69,6 +71,11 @@ mkdir bin && curl -o bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest
 ```
 
 And then [install `ffmpeg` globally](https://www.ffmpeg.org/download.html).
+
+Finally, register the commands:
+```bash
+node scripts/commands
+```
 
 ### Avoiding rate limits
 

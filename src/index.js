@@ -66,7 +66,7 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
 	if (interaction.isMessageContextMenuCommand() && interaction.commandName === 'Embed media') {
-		const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/gm;
+		const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,12}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/gm;
 		const urls = interaction.targetMessage.content.match(regex).map(url => rewrite(url));
 
 		if (urls.length === 0) {

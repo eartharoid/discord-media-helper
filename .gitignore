@@ -1,9 +1,6 @@
 .env*
-.netrc
-cookies.txt
-proxies.txt
-config/
 bin/
-node_modules/
+dist/
 logs/
+node_modules/
 tmp/

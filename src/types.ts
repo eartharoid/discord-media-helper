@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars, no-use-before-define */
+
 export interface Handler {
   name: string;
-  // eslint-disable-next-line no-unused-vars
-  handle: (url: string) => Promise<boolean>;
+  handle: (url: ResolvedURL) => Promise<string>;
 }
 
 export interface Resolver {
@@ -12,6 +13,7 @@ export interface Resolver {
 }
 
 export interface ResolvedURL {
+  file: string,
   id: string,
   input: string,
   resolver: Resolver,

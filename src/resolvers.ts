@@ -27,15 +27,16 @@ export const resolvers: Resolver[] = [
   {
     name: 'instagram',
     prefix: 'ig',
-    handlers: [j2, ig, ytdl],
-    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|reel)\/(?<id>[a-z0-9_-]+)/i,
+    handlers: [ig, j2, ytdl],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv|reel)\/(?<id>[a-z0-9_-]+)/i,
   },
-  {
-    name: 'instagram',
-    prefix: 'igs',
-    handlers: [j2, ig, ytdl],
-    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/stories\/[a-z0-9_-]+\/(?<id>[0-9]+)/i,
-  },
+  // Stories are private and require auth cookies
+  // {
+  //   name: 'instagram',
+  //   prefix: 'igs',
+  //   handlers: [j2, ytdl],
+  //   regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/stories\/[a-z0-9_-]+\/(?<id>[0-9]+)/i,
+  // },
   {
     name: 'reddit',
     prefix: 'rdt',
@@ -58,12 +59,12 @@ export const resolvers: Resolver[] = [
     name: 'twitter',
     prefix: 'tw',
     handlers: [j2, ytdl],
-    regex: /(?<!!)http(s)?:\/\/(www\.)?twitter.com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/i,
+    regex: /(?<!!)http(s)?:\/\/(www\.)?(twitter|x).com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'unknown',
     prefix: '-',
-    handlers: [ytdl, j2],
+    handlers: [j2, ytdl],
     regex: null,
   },
 ];
@@ -81,17 +82,23 @@ export function resolve(content: string, unknown = false) {
     for (const resolver of resolvers) {
       if (resolver.regex === null) {
         if (unknown) {
+          const id = md5(url);
+          const file = `${resolver.prefix}-${id}`;
           resolved.push({
-            id: md5(url),
+            file,
+            id,
             input: url,
             resolver,
           });
         }
       } else {
-        const match = resolver.regex.exec(content);
+        const match = resolver.regex.exec(url);
         if (match) {
+          const { id } = match.groups;
+          const file = `${resolver.prefix}-${id}`;
           resolved.push({
-            id: match.groups.id,
+            file,
+            id,
             input: url,
             resolver,
           });

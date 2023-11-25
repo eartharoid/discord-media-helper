@@ -1,16 +1,32 @@
 {
   "name": "discord-media-helper",
-  "main": "src/",
+  "type": "module",
+  "main": "dist/",
   "scripts": {
-    "dev": ".\\bin\\caddy.exe file-server --browse --root tmp",
-    "dev-cloudflared": ".\\bin\\cloudflared.exe tunnel run dmh"
+    "build": "tsc",
+    "caddy": ".\\bin\\caddy.exe file-server --browse --root tmp",
+    "cloudflared": ".\\bin\\cloudflared.exe tunnel run dmh",
+    "dev": "ts-node src/",
+    "watch": "concurrently \"tsc -w\" \"nodemon --delay 5 dist\"",
+    "web": "concurrently \"npm:caddy\" \"npm:cloudflared\""
   },
   "devDependencies": {
-    "eslint": "^8.24.0"
+    "@types/node": "^20.9.4",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.24.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
-    "discord.js": "^14.11.0",
-    "dotenv": "^16.0.3",
-    "leekslazylogger": "^4.1.7"
+    "@types/ms": "^0.7.34",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "got": "^13.0.0",
+    "leekslazylogger": "^6.0.0",
+    "ms": "^2.1.3"
   }
 }

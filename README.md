@@ -31,7 +31,7 @@ Idea and hosting by [@RTCFlyer](https://github.com/RTCFlyer).
 
 Clone the repository:
 ```
-git clone https://github.com/eartharoid/discord-mediahelper.git bot && cd bot
+git clone https://github.com/eartharoid/discord-media-helper.git bot && cd bot
 ```
 
 Then create a `.env` file with the following contents:

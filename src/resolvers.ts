@@ -71,7 +71,7 @@ export const resolvers: Resolver[] = [
 
 function getURLs(content: string) {
   const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,12}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/gm;
-  const urls = content.match(regex).map((url) => rewrite(url));
+  const urls = (content.match(regex) || []).map((url: string) => rewrite(url));
   return urls;
 }
 

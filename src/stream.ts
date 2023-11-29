@@ -1,9 +1,10 @@
+// https://github.com/sindresorhus/got/blob/main/documentation/3-streams.md
+
 import got from 'got';
 import { pipeline as streamPipeline } from 'node:stream/promises';
 import { createWriteStream } from 'node:fs';
-import { join } from 'node:path';
 
-export default async function streamFile(url: string, fileName: string) {
+export default async function streamFile(url: string, path: string) {
   const readStream = got.stream(url, { throwHttpErrors: false });
   const onError = (error: unknown) => {
     throw error;
@@ -13,7 +14,7 @@ export default async function streamFile(url: string, fileName: string) {
     try {
       await streamPipeline(
         readStream,
-        createWriteStream(join(process.env.DOWNLOAD_DIR, fileName)),
+        createWriteStream(path),
       );
     } catch (error) {
       onError(error);

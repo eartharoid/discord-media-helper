@@ -3,7 +3,7 @@ const rewrites: [RegExp, string][] = [
 ];
 
 export default function rewrite(content: string) {
-  let rewritten: string;
+  let rewritten = '';
   for (const [find, replace] of rewrites) rewritten = content.replace(find, replace);
   return rewritten;
 }

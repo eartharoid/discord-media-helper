@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
 
 export interface Handler {
-  name: string;
   handle: (url: ResolvedURL) => Promise<string>;
+  name: string;
+  raw_url?: boolean;
 }
 
 export interface Resolver {
   name: string;
   prefix: string;
   handlers: Handler[];
-  regex?: RegExp;
+  regex: RegExp | null;
 }
 
 export interface ResolvedURL {

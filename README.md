@@ -39,15 +39,12 @@ Then create a `.env` file with the following contents:
 DISCORD_CLIENT_ID=
 DISCORD_TOKEN=
 DOWNLOAD_DIR=
+FFMPEG_BIN=ffmpeg
 HOST=
 MAX_FILE_SIZE=50M
 RAPID_API_KEY=
+YTDL_BIN=yt-dlp
 ```
-
-> e.g.
-> ```bash
-> echo "DISCORD_CLIENT_ID=\nDISCORD_TOKEN=\nDOWNLOAD_DIR=\nHOST=\nMAX_FILE_SIZE=50M\nRAPID_API_KEY=" > .env
-> ```
 
 Create a Discord application and bot **with the message content privileged intent enabled** and paste the token into the `.env` file.
 
@@ -69,10 +66,10 @@ npm run build
 
 Download `yt-dlp`:
 ```bash
-mkdir bin && curl -o bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+curl -o /usr/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
 ```
 
-And then [install `ffmpeg` globally](https://www.ffmpeg.org/download.html).
+And then [install `ffmpeg`](https://www.ffmpeg.org/download.html).
 
 Finally, register the commands:
 ```bash

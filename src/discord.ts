@@ -17,7 +17,8 @@ const client = new Client({
   ],
 });
 
-client.once('ready', () => {
+// eslint-disable-next-line no-shadow
+client.once('ready', (client) => {
   log.success('Connected to Discord as', client.user.tag);
   function setPresence() {
     client.user.setActivity({
@@ -34,17 +35,21 @@ client.on('messageCreate', async (message) => {
   const urls = resolve(message.content, false);
   if (urls.length === 0) return;
   log.info(`Message ${message.id} from ${message.author.username} contains ${urls.length} processable URLs`);
-  message.channel.sendTyping(); // don't await
   try {
+    message.channel.sendTyping(); // don't await
     const downloaded = await retrieveMultiple(urls);
-    message.reply({
-      allowedMentions: { repliedUser: false },
-      content: downloaded.join('\n'),
-    });
-    message.suppressEmbeds().catch((error) => {
-      log.warn('Failed to suppress embeds');
-      log.error(error);
-    });
+    if (downloaded.length === 0) {
+      log.info('None of the processable URLs were successfully retrieved');
+    } else {
+      message.reply({
+        allowedMentions: { repliedUser: false },
+        content: downloaded.join('\n'),
+      });
+      message.suppressEmbeds().catch((error) => {
+        log.warn('Failed to suppress embeds');
+        log.error(error);
+      });
+    }
   } catch (error) {
     log.error(error);
   }
@@ -55,28 +60,31 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName !== 'Embed media') return;
   log.info(`${interaction.user.username} requested to embed media from message ${interaction.targetMessage.id}`);
   const urls = resolve(interaction.targetMessage.content, true);
-  if (urls.length === 0) {
-    interaction.reply({
-      content: ':x: There are no valid URLs in this message.',
-      ephemeral: true,
-    });
-  } else {
-    log.info(`Message ${interaction.targetMessage.id} from ${interaction.targetMessage.author.username} contains ${urls.length} processable URLs`);
-    try {
+  try {
+    if (urls.length === 0) {
+      await interaction.reply({
+        content: ':x: There are no valid URLs in this message.',
+        ephemeral: true,
+      });
+    } else {
+      log.info(`Message ${interaction.targetMessage.id} from ${interaction.targetMessage.author.username} contains ${urls.length} processable URLs`);
       await interaction.deferReply();
       const downloaded = await retrieveMultiple(urls);
       if (downloaded.length === 0) {
-        interaction.editReply({ content: ':x: None of the URLs in this message are supported.' });
+        log.info('None of the processable URLs were successfully retrieved');
+        await interaction.editReply({ content: ':x: None of the URLs in this message are supported.' });
       } else {
-        interaction.editReply({ content: downloaded.join('\n') });
-        interaction.targetMessage.suppressEmbeds().catch((error) => {
-          log.warn('Failed to suppress embeds');
-          log.error(error);
-        });
+        await Promise.all([
+          interaction.editReply({ content: downloaded.join('\n') }),
+          interaction.targetMessage.suppressEmbeds().catch((error) => {
+            log.warn('Failed to suppress embeds');
+            log.error(error);
+          }),
+        ]);
       }
-    } catch (error) {
-      log.error(error);
     }
+  } catch (error) {
+    log.error(error);
   }
 });
 

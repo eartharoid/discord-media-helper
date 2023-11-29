@@ -2,6 +2,7 @@ import type { ResolvedURL, Resolver } from './types.js';
 import ig from './handlers/ig.js';
 import j2 from './handlers/j2.js';
 import ytdl from './handlers/ytdl.js';
+import tw from './handlers/tw.js';
 import rewrite from './rewrite.js';
 import md5 from './md5.js';
 
@@ -52,13 +53,14 @@ export const resolvers: Resolver[] = [
   {
     name: 'tiktok',
     prefix: 'tik',
+    // handlers: [j2, ytdl],
     handlers: [j2, ytdl],
     regex: /(?<!!)http(s)?:\/\/vm\.tiktok.com\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'twitter',
     prefix: 'tw',
-    handlers: [j2, ytdl],
+    handlers: [tw],
     regex: /(?<!!)http(s)?:\/\/(www\.)?(twitter|x).com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/i,
   },
   {
@@ -93,7 +95,7 @@ export function resolve(content: string, unknown = false) {
         }
       } else {
         const match = resolver.regex.exec(url);
-        if (match) {
+        if (match && match.groups) {
           const { id } = match.groups;
           const file = `${resolver.prefix}-${id}`;
           resolved.push({

@@ -1,5 +1,15 @@
-import { Logger } from 'leekslazylogger';
+import {
+  ConsoleTransport,
+  FileTransport,
+  Logger,
+} from 'leekslazylogger';
 
 export default new Logger({
-  namespaces: ['ytdl'],
+  namespaces: ['ffmpeg', 'ytdl'],
+  transports: [
+    new ConsoleTransport(),
+    new FileTransport({
+      level: 'verbose',
+    }),
+  ],
 });

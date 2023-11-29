@@ -2,15 +2,16 @@ import { resolve } from 'path';
 import { spawn } from 'child_process';
 import type { Handler } from '../types.js';
 import log from '../log.js';
+import env from '../env.js';
 
 const handler: Handler = {
   name: 'ytdl',
   async handle(url) {
-    const bin = `bin/yt-dlp${process.platform === 'win32' ? '.exe' : ''}`;
+    const bin = env.YTDL_BIN;
     const args = [
       url.input,
       '-P',
-      resolve(process.env.DOWNLOAD_DIR),
+      resolve(env.DOWNLOAD_DIR),
       '-o',
       `${url.file}.%(ext)s`,
       '-S',
@@ -18,7 +19,7 @@ const handler: Handler = {
       '-f',
       'bv*+ba/b',
       '--max-filesize',
-      process.env.MAX_FILE_SIZE || '50M',
+      env.MAX_FILE_SIZE,
     ];
     log.info('Spawning `%s %s`', bin, args.join(' '));
     return new Promise((fulfil, reject) => {
@@ -34,7 +35,7 @@ const handler: Handler = {
       });
       child.stderr.on('data', (line) => {
         let str = line.toString().replace(/\n$/, '');
-        let level = 'error';
+        let level: 'error' | 'warn' = 'error';
         if (str.startsWith('WARNING:')) {
           level = 'warn';
           str = str.substring(9);

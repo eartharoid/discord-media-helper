@@ -28,7 +28,8 @@ export const resolvers: Resolver[] = [
   {
     name: 'instagram',
     prefix: 'ig',
-    handlers: [ig, j2, ytdl],
+    // handlers: [ig, j2, ytdl],
+    handlers: [j2, ig, ytdl], // ig is slightly faster but we have a much higher rate-limit for j2
     regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv|reel)\/(?<id>[a-z0-9_-]+)/i,
   },
   // Stories are private and require auth cookies

@@ -5,6 +5,8 @@ import ytdl from './handlers/ytdl.js';
 import tw from './handlers/tw.js';
 import rewrite from './rewrite.js';
 import md5 from './md5.js';
+import env from './env.js';
+import log from './log.js';
 
 export const resolvers: Resolver[] = [
   {
@@ -61,9 +63,10 @@ export const resolvers: Resolver[] = [
   {
     name: 'twitter',
     prefix: 'tw',
-    handlers: [tw],
+    handlers: [tw, j2, ytdl],
     regex: /(?<!!)http(s)?:\/\/(www\.)?(twitter|x).com\/[a-z0-9._-]+\/status\/(?<id>[a-z0-9_-]+)/i,
   },
+  // ! this **must** be last
   {
     name: 'unknown',
     prefix: '-',
@@ -81,7 +84,11 @@ function getURLs(content: string) {
 export function resolve(content: string, unknown = false) {
   const resolved: ResolvedURL[] = [];
   const urls = getURLs(content);
-  for (const url of urls) {
+  forUrls: for (const url of urls) {
+    if (url.startsWith(env.HOST)) {
+      log.warn(`Ignoring "${url}"`);
+      continue;
+    }
     for (const resolver of resolvers) {
       if (resolver.regex === null) {
         if (unknown) {
@@ -93,6 +100,7 @@ export function resolve(content: string, unknown = false) {
             input: url,
             resolver,
           });
+          continue forUrls;
         }
       } else {
         const match = resolver.regex.exec(url);
@@ -105,6 +113,7 @@ export function resolve(content: string, unknown = false) {
             input: url,
             resolver,
           });
+          continue forUrls;
         }
       }
     }

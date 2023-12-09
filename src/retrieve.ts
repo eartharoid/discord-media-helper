@@ -4,7 +4,9 @@ import log from './log.js';
 import { exists } from './fs.js';
 import env from './env.js';
 
-export async function retrieveOne(url: ResolvedURL) {
+type Initiator = 'interaction' | 'message';
+
+export async function retrieveOne(url: ResolvedURL, initiator: Initiator) {
   // assume file extension is mp4 for the purposes of checking if the file exists
   const path = join(env.DOWNLOAD_DIR, `${url.file}.mp4`);
   const fileExists = await exists(path);
@@ -13,11 +15,13 @@ export async function retrieveOne(url: ResolvedURL) {
     return `${env.HOST}${url.file}.mp4`;
   }
   log.info(`Retrieving ${url.file}`);
-  for await (const handler of url.resolver.handlers) {
+  const handlers = url.resolver.handlers.filter((handler) => handler.flags.has(`RUN_ON_${initiator.toUpperCase()}` as `RUN_ON_${Uppercase<Initiator>}`));
+  if (handlers.length === 0) throw new Error(`No handlers found for ${url.file} initiated by ${initiator}`);
+  for await (const handler of handlers) {
     try {
       const result = await handler.handle(url);
       log.success(`Retrieved ${url.file} with ${handler.name}`);
-      if (handler.raw_url) return result;
+      if (handler.flags.has('RETURNS_RAW_URL')) return result;
       return env.HOST + result;
     } catch (error) {
       log.warn(`Failed to retrieve ${url.file} with ${handler.name}`);
@@ -28,8 +32,8 @@ export async function retrieveOne(url: ResolvedURL) {
   throw new Error(`No handlers succeeded for ${url.file}`);
 }
 
-export async function retrieveMultiple(urls: ResolvedURL[]) {
-  const results = await Promise.allSettled(urls.map((url) => retrieveOne(url)));
+export async function retrieveMultiple(urls: ResolvedURL[], initiator: Initiator) {
+  const results = await Promise.allSettled(urls.map((url) => retrieveOne(url, initiator)));
   const succeeded = results.filter((result) => result.status === 'fulfilled') as PromiseFulfilledResult<string>[];
   return succeeded.map((result) => result.value);
 }

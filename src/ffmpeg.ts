@@ -4,11 +4,8 @@ import { rm } from 'fs/promises';
 import log from './log.js';
 import env from './env.js';
 import { exists, tmpDir } from './fs.js';
-import { sleep } from './utils.js';
 
 export default async function transcode(fileName: string): Promise<void> {
-  log.verbose('Waiting 100ms for temporary file');
-  await sleep(100);
   const bin = env.FFMPEG_BIN;
   const args = [
     '-i',

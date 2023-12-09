@@ -1,11 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import PQueue from 'p-queue';
 import ms from 'ms';
-import { join } from 'node:path';
+import download from 'download';
 import rapid from '../api/rapid.js';
-import download from '../stream.js';
 import type { Handler } from '../types.js';
 import { tmpDir } from '../fs.js';
 import transcode from '../ffmpeg.js';
+import HandlerFlags from '../flags/handler.js';
 
 type IGResponse = { // ! non-exhaustive
   is_video: boolean,
@@ -22,6 +23,7 @@ const queue = new PQueue({
 
 const handler: Handler = {
   name: 'ig',
+  flags: new HandlerFlags(['RUN_ON_INTERACTION', 'RUN_ON_MESSAGE']),
   async handle(url) {
     const API = rapid('instagram-scraper-2022.p.rapidapi.com');
     const data = await queue.add((): Promise<IGResponse> => API.get(`ig/post_info/?shortcode=${url.id}`).json());
@@ -31,7 +33,7 @@ const handler: Handler = {
     if (!data.video_url) throw new Error('No video found');
     const extension = new URL(data.video_url).pathname.split('.').pop();
     const fileName = `${url.file}.${extension}`;
-    await download(data.video_url, join(tmpDir, fileName));
+    await download(data.video_url, tmpDir, { filename: fileName });
     await transcode(fileName);
     return fileName;
   },

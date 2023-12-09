@@ -37,7 +37,7 @@ client.on('messageCreate', async (message) => {
   log.info(`Message ${message.id} from ${message.author.username} contains ${urls.length} processable URLs`);
   try {
     message.channel.sendTyping(); // don't await
-    const downloaded = await retrieveMultiple(urls);
+    const downloaded = await retrieveMultiple(urls, 'message');
     if (downloaded.length === 0) {
       log.info('None of the processable URLs were successfully retrieved');
     } else {
@@ -69,7 +69,7 @@ client.on('interactionCreate', async (interaction) => {
     } else {
       log.info(`Message ${interaction.targetMessage.id} from ${interaction.targetMessage.author.username} contains ${urls.length} processable URLs`);
       await interaction.deferReply();
-      const downloaded = await retrieveMultiple(urls);
+      const downloaded = await retrieveMultiple(urls, 'interaction');
       if (downloaded.length === 0) {
         log.info('None of the processable URLs were successfully retrieved');
         await interaction.editReply({ content: ':x: None of the URLs in this message are supported.' });

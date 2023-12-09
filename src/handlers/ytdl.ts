@@ -3,9 +3,11 @@ import { spawn } from 'child_process';
 import type { Handler } from '../types.js';
 import log from '../log.js';
 import env from '../env.js';
+import HandlerFlags from '../flags/handler.js';
 
 const handler: Handler = {
   name: 'ytdl',
+  flags: new HandlerFlags(['RUN_ON_INTERACTION', 'RUN_ON_MESSAGE']),
   async handle(url) {
     const bin = env.YTDL_BIN;
     const args = [

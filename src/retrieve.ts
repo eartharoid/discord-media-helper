@@ -15,7 +15,7 @@ export async function retrieveOne(url: ResolvedURL, initiator: Initiator) {
     return `${env.HOST}${url.file}.mp4`;
   }
   log.info(`Retrieving ${url.file}`);
-  const handlers = url.resolver.handlers.filter((handler) => handler.flags.has(`RUN_ON_${initiator.toUpperCase()}` as `RUN_ON_${Uppercase<Initiator>}`));
+  const handlers = url.resolver.handlers.filter((handler) => handler.flags.has(`RUN_ON_${initiator.toUpperCase() as Uppercase<Initiator>}`));
   if (handlers.length === 0) throw new Error(`No handlers found for ${url.file} initiated by ${initiator}`);
   for await (const handler of handlers) {
     try {

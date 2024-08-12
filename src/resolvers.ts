@@ -32,11 +32,11 @@ export const resolvers: Resolver[] = [
     prefix: 'ig',
     // handlers: [ig, j2, ytdl],
     handlers: [j2, ig, ytdl], // ig is slightly faster but we have a much higher rate-limit for j2
-    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv)\/(?<id>[a-z0-9_-]+)/i,
+    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv|reel)\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'instagram',
-    prefix: 'igr',
+    prefix: 'ig',
     // handlers: [ig, j2, ytdl],
     handlers: [j2, ig, ytdl], // ig is slightly faster but we have a much higher rate-limit for j2
     regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/[a-z0-9._-]+\/reel\/(?<id>[a-z0-9_-]+)/i,

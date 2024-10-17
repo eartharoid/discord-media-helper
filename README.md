@@ -9,12 +9,32 @@ Idea and hosting by [@RTCFlyer](https://github.com/RTCFlyer).
 
 ## Supported links
 
+Links to these website will cause an automatic reply with either an image/video attachment or a rich embed.
+
+### Videos
+
+Videos and some images from posts, shorts, reels, stories, etc are attached in chat as if uploaded directly to Discord.
+
 - Facebook
 - iFunny
 - Instagram
 - Reddit
 - TikTok
-- Twitter
+
+#### Other
+
+Using the message context menu command (Apps > Embed media)
+will cause the bot to attempt to download media from any (including unrecognised) links using [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+
+### Rich embeds
+
+For multimedia social websites where text is often the primary content,
+the bot replies with links to existing "embed fixer" services which
+usually provide text content, author name, number of likes and comments, and improved image and video embeds.
+
+- Bluesky (via [bskye.app](https://bskye.app))
+- Twitter (via [fxtwitter.com](https://fxtwitter.com))
+
 
 ## Self-hosting
 
@@ -24,7 +44,7 @@ Idea and hosting by [@RTCFlyer](https://github.com/RTCFlyer).
 - A local webserver to serve static files
 - `yt-dlp`
 - `ffmpeg`
-- https://rapidapi.com/arraybobo/api/instagram-scraper-2022/pricing
+- https://rapidapi.com/social-api1-instagram/api/instagram-scraper-api2/pricing
 - https://rapidapi.com/nguyenmanhict-MuTUtGWD7K/api/auto-download-all-in-one/pricing
 
 ### Installation

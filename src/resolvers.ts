@@ -1,4 +1,5 @@
 import type { ResolvedURL, Resolver } from './types.js';
+import bs from './handlers/bs.js';
 import dd from './handlers/dd.js';
 import ig from './handlers/ig.js';
 import j2 from './handlers/j2.js';
@@ -11,6 +12,12 @@ import env from './env.js';
 import log from './log.js';
 
 export const resolvers: Resolver[] = [
+  {
+    name: 'bsky',
+    prefix: 'bs',
+    handlers: [bs],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?bsky.app\/profile\/[a-z0-9._-]+\/post\/(?<id>[a-z0-9_-]+)/i,
+  },
   {
     name: 'facebook',
     prefix: 'fb',

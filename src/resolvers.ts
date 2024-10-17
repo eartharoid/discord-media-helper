@@ -1,7 +1,9 @@
 import type { ResolvedURL, Resolver } from './types.js';
+import dd from './handlers/dd.js';
 import ig from './handlers/ig.js';
 import j2 from './handlers/j2.js';
 import ytdl from './handlers/ytdl.js';
+import tnk from './handlers/tnk.js';
 import tw from './handlers/tw.js';
 import rewrite from './rewrite.js';
 import md5 from './md5.js';
@@ -30,41 +32,40 @@ export const resolvers: Resolver[] = [
   {
     name: 'instagram',
     prefix: 'ig',
-    // handlers: [ig, j2, ytdl],
-    handlers: [j2, ig, ytdl], // ig is slightly faster but we have a much higher rate-limit for j2
-    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv|reel)\/(?<id>[a-z0-9_-]+)/i,
+    // ig is slightly faster but we have a much higher rate-limit for j2
+    handlers: [dd, j2, ig, ytdl],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv)\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'instagram',
-    prefix: 'ig',
-    // handlers: [ig, j2, ytdl],
-    handlers: [j2, ig, ytdl], // ig is slightly faster but we have a much higher rate-limit for j2
-    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/[a-z0-9._-]+\/reel\/(?<id>[a-z0-9_-]+)/i,
+    prefix: 'igr',
+    handlers: [ig, j2],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com(\/[a-z0-9._-]+)?\/reels?\/(?<id>[a-z0-9_-]+)/i,
   },
   // Stories are private and require auth cookies
-  // {
-  //   name: 'instagram',
-  //   prefix: 'igs',
-  //   handlers: [j2, ytdl],
-  //   regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/stories\/[a-z0-9_-]+\/(?<id>[0-9]+)/i,
-  // },
+  {
+    name: 'instagram',
+    prefix: 'igs',
+    handlers: [dd],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/stories\/[a-z0-9_-]+\/(?<id>[0-9]+)/i,
+  },
   {
     name: 'reddit',
     prefix: 'rdt',
     handlers: [j2, ytdl],
     regex: /(?<!!)http(s)?:\/\/(www\.)?reddit.com\/r\/[a-z0-9._-]+\/comments\/(?<id>[a-z0-9]+)/i,
   },
+  // Long URLs have an embedded player like YouTube now
+  // {
+  //   name: 'tiktok',
+  //   prefix: 'tik',
+  //   handlers: [tnk, j2, ytdl],
+  //   regex: /(?<!!)http(s)?:\/\/(www\.)?tiktok.com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/i,
+  // },
   {
     name: 'tiktok',
     prefix: 'tik',
-    handlers: [j2, ytdl],
-    regex: /(?<!!)http(s)?:\/\/(www\.)?tiktok.com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/i,
-  },
-  {
-    name: 'tiktok',
-    prefix: 'tik',
-    // handlers: [j2, ytdl],
-    handlers: [j2, ytdl],
+    handlers: [tnk, j2, ytdl],
     regex: /(?<!!)http(s)?:\/\/vm\.tiktok.com\/(?<id>[a-z0-9_-]+)/i,
   },
   {

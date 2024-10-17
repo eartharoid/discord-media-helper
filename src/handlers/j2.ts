@@ -40,7 +40,9 @@ const handler: Handler = {
     if (data.error) throw new Error(data.message);
     const videos = data.medias.filter((m) => m.type === 'video');
     if (videos.length === 0) throw new Error('No videos found');
-    const fileName = `${url.file}.${videos[0].extension}`;
+    const ext = videos[0].extension;
+    const fileName = `${url.file}.${ext}`;
+
     await download(videos[0].url, tmpDir, { filename: fileName });
     await transcode(fileName);
     return fileName;

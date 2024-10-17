@@ -19,6 +19,15 @@
   ],
   "root": true,
   "rules": {
+    "max-len": ["error", {
+      "ignoreComments": true,
+      "ignoreTrailingComments": false,
+      "ignoreUrls": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreRegExpLiterals": true,
+      "code": 100
+    }],
     "import/extensions": "off",
     "import/no-unresolved": "warn",
     "no-continue": "off",

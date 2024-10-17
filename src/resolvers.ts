@@ -32,7 +32,6 @@ export const resolvers: Resolver[] = [
   {
     name: 'instagram',
     prefix: 'ig',
-    // ig is slightly faster but we have a much higher rate-limit for j2
     handlers: [dd, j2, ig, ytdl],
     regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv)\/(?<id>[a-z0-9_-]+)/i,
   },
@@ -66,7 +65,7 @@ export const resolvers: Resolver[] = [
     name: 'tiktok',
     prefix: 'tik',
     handlers: [tnk, j2, ytdl],
-    regex: /(?<!!)http(s)?:\/\/vm\.tiktok.com\/(?<id>[a-z0-9_-]+)/i,
+    regex: /(?<!!)http(s)?:\/\/v(m|t)\.tiktok.com\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'twitter',

@@ -8,6 +8,7 @@ import {
 import log from './log.js';
 import { resolve } from './resolvers.js';
 import { retrieveMultiple } from './retrieve.js';
+import formatRetrieved from './fmt.js';
 
 const client = new Client({
   intents: [
@@ -43,7 +44,7 @@ client.on('messageCreate', async (message) => {
     } else {
       message.reply({
         allowedMentions: { repliedUser: false },
-        content: downloaded.join('\n'),
+        content: formatRetrieved(downloaded),
       });
       message.suppressEmbeds().catch((error) => {
         log.warn('Failed to suppress embeds');
@@ -75,7 +76,7 @@ client.on('interactionCreate', async (interaction) => {
         await interaction.editReply({ content: ':x: None of the URLs in this message are supported.' });
       } else {
         await Promise.all([
-          interaction.editReply({ content: downloaded.join('\n') }),
+          interaction.editReply({ content: formatRetrieved(downloaded) }),
           interaction.targetMessage.suppressEmbeds().catch((error) => {
             log.warn('Failed to suppress embeds');
             log.error(error);

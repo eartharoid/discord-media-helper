@@ -22,7 +22,7 @@ export const resolvers: Resolver[] = [
     name: 'facebook',
     prefix: 'fb',
     handlers: [j2, ytdl],
-    regex: /(?<!!)http(s)?:\/\/(www\.)?facebook.com\/((share\/r)|([a-z0-9._-]+\/videos)|reel)\/(?<id>[a-z0-9_-]+)/i,
+    regex: /(?<!!)http(s)?:\/\/(www\.)?facebook.com\/((share\/[rv])|([a-z0-9._-]+\/videos)|reel)\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'facebook',

@@ -73,7 +73,7 @@ client.on('interactionCreate', async (interaction) => {
       const downloaded = await retrieveMultiple(urls, 'interaction');
       if (downloaded.length === 0) {
         log.info('None of the processable URLs were successfully retrieved');
-        await interaction.editReply({ content: ':x: None of the URLs in this message are supported.' });
+        await interaction.editReply({ content: ':x: Sorry, we couldn\'t retrieve any media from these URLs.' });
       } else {
         await Promise.all([
           interaction.editReply({ content: formatRetrieved(downloaded) }),

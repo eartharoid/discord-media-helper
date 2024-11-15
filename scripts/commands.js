@@ -8,6 +8,8 @@ import {
 	ApplicationCommandType,
 	REST,
 	Routes,
+  InteractionContextType,
+  ApplicationIntegrationType,
 } from 'discord.js'
 
 config();
@@ -16,6 +18,15 @@ const commands = [
 	new ContextMenuCommandBuilder()
 		.setName('Embed media')
 		.setType(ApplicationCommandType.Message)
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([
+      InteractionContextType.BotDM,
+      InteractionContextType.Guild,
+      InteractionContextType.PrivateChannel,
+    ])
 		.toJSON(),
 ];
 

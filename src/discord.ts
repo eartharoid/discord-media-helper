@@ -57,35 +57,58 @@ client.on('messageCreate', async (message) => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isMessageContextMenuCommand()) return;
-  if (interaction.commandName !== 'Embed media') return;
-  log.info(`${interaction.user.username} requested to embed media from message ${interaction.targetMessage.id}`);
-  const urls = resolve(interaction.targetMessage.content, true);
-  try {
-    if (urls.length === 0) {
-      await interaction.reply({
-        content: ':x: There are no valid URLs in this message.',
-        ephemeral: true,
-      });
-    } else {
-      log.info(`Message ${interaction.targetMessage.id} from ${interaction.targetMessage.author.username} contains ${urls.length} processable URLs`);
-      await interaction.deferReply();
-      const downloaded = await retrieveMultiple(urls, 'interaction');
-      if (downloaded.length === 0) {
-        log.info('None of the processable URLs were successfully retrieved');
-        await interaction.editReply({ content: ':x: Sorry, we couldn\'t retrieve any media from these URLs.' });
+  if (interaction.isMessageContextMenuCommand() && interaction.commandName === 'Embed media') {
+    log.info(`${interaction.user.username} requested to embed media from message ${interaction.targetMessage.id}`);
+    const urls = resolve(interaction.targetMessage.content, true);
+    try {
+      if (urls.length === 0) {
+        await interaction.reply({
+          content: ':x: There are no valid URLs in this message.',
+          ephemeral: true,
+        });
       } else {
-        await Promise.all([
-          interaction.editReply({ content: formatRetrieved(downloaded) }),
-          interaction.targetMessage.suppressEmbeds().catch((error) => {
-            log.warn('Failed to suppress embeds');
-            log.error(error);
-          }),
-        ]);
+        log.info(`Message ${interaction.targetMessage.id} from ${interaction.targetMessage.author.username} contains ${urls.length} processable URLs`);
+        await interaction.deferReply();
+        const downloaded = await retrieveMultiple(urls, 'interaction');
+        if (downloaded.length === 0) {
+          log.info('None of the processable URLs were successfully retrieved');
+          await interaction.editReply({ content: ':x: Sorry, we couldn\'t retrieve any media from these URLs.' });
+        } else {
+          await Promise.all([
+            interaction.editReply({ content: formatRetrieved(downloaded) }),
+            interaction.targetMessage.suppressEmbeds().catch((error) => {
+              log.warn('Failed to suppress embeds');
+              log.error(error);
+            }),
+          ]);
+        }
       }
+    } catch (error) {
+      log.error(error);
     }
-  } catch (error) {
-    log.error(error);
+  } else if (interaction.isChatInputCommand() && interaction.commandName === 'embed-media') {
+    log.info(`${interaction.user.username} requested to embed media with interaction ${interaction.id}`);
+    const urls = resolve(interaction.options.getString('url') || '', true);
+    try {
+      if (urls.length === 0) {
+        await interaction.reply({
+          content: ':x: There are no valid URLs in this message.',
+          ephemeral: true,
+        });
+      } else {
+        log.info(`Interaction ${interaction.id} from ${interaction.user.username} contains ${urls.length} processable URLs`);
+        await interaction.deferReply();
+        const downloaded = await retrieveMultiple(urls, 'interaction');
+        if (downloaded.length === 0) {
+          log.info('None of the processable URLs were successfully retrieved');
+          await interaction.editReply({ content: ':x: Sorry, we couldn\'t retrieve any media from these URLs.' });
+        } else {
+          await interaction.editReply({ content: formatRetrieved(downloaded) });
+        }
+      }
+    } catch (error) {
+      log.error(error);
+    }
   }
 });
 

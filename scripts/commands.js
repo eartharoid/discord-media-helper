@@ -10,6 +10,7 @@ import {
 	Routes,
   InteractionContextType,
   ApplicationIntegrationType,
+  SlashCommandBuilder,
 } from 'discord.js'
 
 config();
@@ -28,6 +29,25 @@ const commands = [
       InteractionContextType.PrivateChannel,
     ])
 		.toJSON(),
+  new SlashCommandBuilder()
+    .setName('embed-media')
+    .setDescription('Embed a video from the given URL')
+    .addStringOption((option) =>
+      option
+        .setName('url')
+        .setDescription('The URL of a video on TikTok, Instagram, etc')
+        .setRequired(true)
+    )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([
+      InteractionContextType.BotDM,
+      InteractionContextType.Guild,
+      InteractionContextType.PrivateChannel,
+    ])
+    .toJSON(),
 ];
 
 console.log(commands);

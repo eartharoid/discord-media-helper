@@ -10,7 +10,7 @@ const handler: Handler = {
   flags: new HandlerFlags(['RUN_ON_INTERACTION', 'RUN_ON_MESSAGE']),
   async handle(url: ResolvedURL) {
     // download(`https://d.tnktok.com/...`) // less explicit, more error prone
-    const regex = /<meta property="og:video" content="(?<video>[^"]+)"\/><meta property="og:video:type" content="video\/(?<ext>[a-z0-9_-]+)"/i;
+    const regex = /<meta property="og:video" content="(?<video>[^"]+)"(.+)<meta property="og:video:type" content="video\/(?<ext>[a-z0-9_-]+)"/is;
     const html = await got(new URL(new URL(url.input).pathname, 'https://tnktok.com').toString()).text();
     const result = regex.exec(html);
     const ext = result?.groups?.ext;

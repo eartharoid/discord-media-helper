@@ -62,12 +62,12 @@ export const resolvers: Resolver[] = [
     regex: /(?<!!)http(s)?:\/\/(www\.)?reddit.com\/r\/[a-z0-9._-]+\/comments\/(?<id>[a-z0-9]+)/i,
   },
   // Long URLs have an embedded player like YouTube now
-  // {
-  //   name: 'tiktok',
-  //   prefix: 'tik',
-  //   handlers: [tnk, j2, ytdl],
-  //   regex: /(?<!!)http(s)?:\/\/(www\.)?tiktok.com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/i,
-  // },
+  {
+    name: 'tiktok',
+    prefix: 'tik',
+    handlers: [tnk, j2, ytdl],
+    regex: /(?<!!)http(s)?:\/\/(www\.)?tiktok.com\/((@[a-z0-9._-]+\/video\/)|t\/)(?<id>[a-z0-9_-]+)/i,
+  },
   {
     name: 'tiktok',
     prefix: 'tik',

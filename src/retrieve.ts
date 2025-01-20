@@ -1,5 +1,5 @@
 import { join } from 'path';
-import type { ResolvedURL } from './types.js';
+import type { HandlerContext, MediaOptions, ResolvedURL } from './types.js';
 import log from './log.js';
 import { exists } from './fs.js';
 import env from './env.js';
@@ -12,16 +12,28 @@ export type Retrieved = {
   raw?: string;
 };
 
-export async function retrieveOne(url: ResolvedURL, initiator: Initiator): Promise<Retrieved> {
-  // assume file extension is mp4 for the purposes of checking if the file exists
-  const path = join(env.DOWNLOAD_DIR, `${url.file}.mp4`);
+export async function retrieveOne(
+  url: ResolvedURL,
+  initiator: Initiator,
+  options?: MediaOptions
+): Promise<Retrieved> {
+  // Get file extension based on options
+  const getExtension = (options?: MediaOptions) => {
+    if (options?.audioOnly) {
+      return options.audioFormat || 'mp3';
+    }
+    return 'mp4';
+  };
+
+  const extension = getExtension(options);
+  const path = join(env.DOWNLOAD_DIR, `${url.file}.${extension}`);
   const fileExists = await exists(path);
   if (fileExists) {
-    log.success(`${url.file}.mp4 already exists`);
+    log.success(`${url.file}.${extension} already exists`);
     // return `${env.HOST}${url.file}.mp4`;
     return {
       original: url.input,
-      file: `${url.file}.mp4`,
+      file: `${url.file}.${extension}`,
     };
   }
   log.info(`Retrieving ${url.file}`);
@@ -29,7 +41,11 @@ export async function retrieveOne(url: ResolvedURL, initiator: Initiator): Promi
   if (handlers.length === 0) throw new Error(`No handlers found for ${url.file} initiated by ${initiator}`);
   for await (const handler of handlers) {
     try {
-      const result = await handler.handle(url);
+      const context: HandlerContext = {
+        fileExists,
+        options
+      };
+      const result = await handler.handle(url, context);
       log.success(`Retrieved ${url.file} with ${handler.name}`);
       if (handler.flags.has('RETURNS_RAW_URL')) {
         return {
@@ -37,9 +53,11 @@ export async function retrieveOne(url: ResolvedURL, initiator: Initiator): Promi
           raw: result,
         };
       }
+      // If result already has an extension, use it, otherwise use our computed extension
+      const hasExtension = result.includes('.');
       return {
         original: url.input,
-        file: result,
+        file: hasExtension ? result : `${result}.${extension}`,
       };
     } catch (error) {
       log.warn(`Failed to retrieve ${url.file} with ${handler.name}`);
@@ -50,8 +68,14 @@ export async function retrieveOne(url: ResolvedURL, initiator: Initiator): Promi
   throw new Error(`No handlers succeeded for ${url.file}`);
 }
 
-export async function retrieveMultiple(urls: ResolvedURL[], initiator: Initiator) {
-  const results = await Promise.allSettled(urls.map((url) => retrieveOne(url, initiator)));
+export async function retrieveMultiple(
+  urls: ResolvedURL[],
+  initiator: Initiator,
+  options?: MediaOptions
+) {
+  const results = await Promise.allSettled(
+    urls.map((url) => retrieveOne(url, initiator, options))
+  );
   const succeeded = results.filter((result) => result.status === 'fulfilled') as PromiseFulfilledResult<Retrieved>[];
   return succeeded.map((result) => result.value);
 }

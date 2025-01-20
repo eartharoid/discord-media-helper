@@ -4,31 +4,20 @@
 
 import { config } from 'dotenv';
 import {
-	ContextMenuCommandBuilder,
-	ApplicationCommandType,
-	REST,
-	Routes,
-  InteractionContextType,
-  ApplicationIntegrationType,
+  ContextMenuCommandBuilder,
+  ApplicationCommandType,
+  REST,
+  Routes,
   SlashCommandBuilder,
-} from 'discord.js'
+} from 'discord.js';
 
 config();
 
 const commands = [
-	new ContextMenuCommandBuilder()
-		.setName('Embed media')
-		.setType(ApplicationCommandType.Message)
-    .setIntegrationTypes([
-      ApplicationIntegrationType.GuildInstall,
-      ApplicationIntegrationType.UserInstall,
-    ])
-    .setContexts([
-      InteractionContextType.BotDM,
-      InteractionContextType.Guild,
-      InteractionContextType.PrivateChannel,
-    ])
-		.toJSON(),
+	 new ContextMenuCommandBuilder()
+	   .setName('Embed media')
+	   .setType(ApplicationCommandType.Message)
+	   .toJSON(),
   new SlashCommandBuilder()
     .setName('embed-media')
     .setDescription('Embed a video from the given URL')
@@ -38,15 +27,6 @@ const commands = [
         .setDescription('The URL of a video on TikTok, Instagram, etc')
         .setRequired(true)
     )
-    .setIntegrationTypes([
-      ApplicationIntegrationType.GuildInstall,
-      ApplicationIntegrationType.UserInstall,
-    ])
-    .setContexts([
-      InteractionContextType.BotDM,
-      InteractionContextType.Guild,
-      InteractionContextType.PrivateChannel,
-    ])
     .toJSON(),
 ];
 

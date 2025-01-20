@@ -15,24 +15,42 @@ const queue = new PQueue({
   throwOnTimeout: true,
 });
 
-export default async function transcode(fileName: string): Promise<void> {
+import type { MediaOptions } from './types.js';
+
+export default async function transcode(fileName: string, options?: MediaOptions): Promise<void> {
   const bin = env.FFMPEG_BIN;
-  const args = [
-    '-i',
-    join(tmpDir, fileName),
-    '-c:v',
-    'libx264',
-    '-preset',
-    'veryfast',
-    // '-tune',
-    // 'zerolatency', // this adds several MB to the file size
-    '-c:a',
-    'copy', // don't waste time re-encoding audio
+  const args = ['-y', '-i', join(tmpDir, fileName)];
+
+  if (options?.audioOnly) {
+    // Audio extraction
+    args.push(
+      '-vn', // No video
+      '-c:a', // Audio codec
+      options.audioFormat === 'mp3' ? 'libmp3lame' :
+      options.audioFormat === 'm4a' ? 'aac' :
+      options.audioFormat === 'wav' ? 'pcm_s16le' :
+      options.audioFormat === 'ogg' ? 'libvorbis' :
+      'libmp3lame', // default to mp3
+      '-q:a', '0', // Best quality
+    );
+  } else {
+    // Video transcoding
+    args.push(
+      '-c:v',
+      'libx264',
+      '-preset',
+      'veryfast',
+      '-c:a',
+      'copy', // don't waste time re-encoding audio
+    );
+  }
+
+  args.push(
     '-hide_banner',
     '-v',
     'warning',
-    join(env.DOWNLOAD_DIR, fileName),
-  ];
+    join(env.DOWNLOAD_DIR, fileName)
+  );
   log.info('Queueing `%s %s`', bin, args.join(' '));
   return queue.add(() => new Promise((fulfil, reject) => {
     log.info('Spawning `%s %s`', bin, args.join(' '));

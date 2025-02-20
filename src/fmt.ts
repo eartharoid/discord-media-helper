@@ -7,7 +7,16 @@ export default function formatRetrieved(downloaded: Retrieved[]): string {
       return `-# ${retrieved.raw}`;
     }
     if (retrieved.file) {
-      return `-# [View original](<${retrieved.original}>) • [\`${retrieved.file}\`](${new URL(retrieved.file, env.HOST)})`;
+      const baseText = `-# [View original](<${retrieved.original}>)`;
+      
+      if (retrieved.type === 'gallery' && retrieved.files && retrieved.total) {
+        // For galleries, show current item and total
+        const currentFile = retrieved.file;
+        return `${baseText} • Gallery (1/${retrieved.total}) • [\`${currentFile}\`](${new URL(currentFile, env.HOST)})`;
+      }
+      
+      // For single files
+      return `${baseText} • [\`${retrieved.file}\`](${new URL(retrieved.file, env.HOST)})`;
     }
     return '';
   }).join('\n');

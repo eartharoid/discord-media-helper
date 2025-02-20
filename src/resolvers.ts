@@ -39,13 +39,13 @@ export const resolvers: Resolver[] = [
   {
     name: 'instagram',
     prefix: 'ig',
-    handlers: [dd, j2, ig, ytdl],
+    handlers: [j2, ig, dd, ytdl],
     regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com\/(p|tv)\/(?<id>[a-z0-9_-]+)/i,
   },
   {
     name: 'instagram',
     prefix: 'igr',
-    handlers: [ig, j2],
+    handlers: [j2, ig],
     regex: /(?<!!)http(s)?:\/\/(www\.)?instagram.com(\/[a-z0-9._-]+)?\/reels?\/(?<id>[a-z0-9_-]+)/i,
   },
   // Stories are private and require auth cookies

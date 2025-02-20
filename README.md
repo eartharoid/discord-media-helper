@@ -97,3 +97,30 @@ Finally, register the commands:
 ```bash
 node scripts/commands
 ```
+
+## Debug Mode and Hash System
+
+### Debug Mode
+
+The bot now includes a debug mode for easier troubleshooting. To enable debug mode, add the following line to your `.env` file:
+
+```
+DEBUG=true
+```
+
+When debug mode is enabled, the bot will output additional logging information to help diagnose issues.
+
+### Hash System
+
+A new hash system has been implemented to improve efficiency and reduce duplicate downloads. The system works as follows:
+
+1. When a file is downloaded, its URL is hashed and stored in memory along with the file path.
+2. Before downloading a file, the bot checks if the URL's hash already exists in memory.
+3. If a match is found, the bot uses the stored file instead of downloading it again.
+
+This system helps to:
+- Reduce bandwidth usage
+- Improve response times for previously processed media
+- Minimize storage requirements by avoiding duplicate files
+
+Note that the hash storage is in-memory only and will be cleared when the bot restarts.
